@@ -16,6 +16,7 @@ import java.util.List;
 
 public class ProductAdapter extends ArrayAdapter<Product> {
 
+
     public ProductAdapter(Context context, List<Product> products) {
         super(context, 0, products);
     }
@@ -37,12 +38,14 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         TextView productPriceTextView = listItemView.findViewById(R.id.productPrice);
         TextView productDescriptionTextView = listItemView.findViewById(R.id.productDescription);
 
+
         // Load image, name, price, and description into the views
         if (currentProduct != null) {
             productImageView.setImageResource(currentProduct.getImageResourceId());
             productNameTextView.setText(currentProduct.getName());
-            productPriceTextView.setText(String.valueOf(currentProduct.getPrice()));
+            productPriceTextView.setText("€ " + currentProduct.getPrice());
             productDescriptionTextView.setText(currentProduct.getDescription());
+
         }
 
         return listItemView;

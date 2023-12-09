@@ -3,9 +3,15 @@ package com.example.tp_android;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,26 +24,57 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ProgressBar progressBar;
     private static final String TAG = MainActivity.class.getSimpleName();
-
     private List<Product> productList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+/*
         // Sample static data (for testing purposes)
         String[] products = {"Product 1", "Product 2", "Product 3", "Product 4", "Product 5", "Product 6"};
         double[] prices = {10.0, 20.0, 30.0, 40.0, 50.0, 60.0};
 
         // Populate the list view with static data
         populateListView(products, prices);
+ */
+        ApiFetcher fetcher = new ApiFetcher();
+        fetcher.setOnDataFetchedListener(result -> {
+            // Handle the result here (parse JSON and update UI)
+            parseJsonAndPopulateListView(result);
+            progressBar.setVisibility(View.GONE); // Hide ProgressBar when done
+        });
+        fetcher.execute();
+    }
+
+    private void parseJsonAndPopulateListView(String jsonResult) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResult);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Product product = new Product(jsonObject.getLong("id"),
+                        jsonObject.getString("title"),
+                        jsonObject.getDouble("price"),
+                        jsonObject.getString("description")
+                );
+                productList.add(product);
+            }
+            // Update ListView through the adapter
+            ProductAdapter adapter = new ProductAdapter(this, productList);
+            ListView listView = findViewById(R.id.listView);
+            listView.setAdapter(adapter);
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parsing JSON", e);
+            // Handle JSON parsing error
+        }
     }
 
     private void populateListView(String[] products, double[] prices) {
         for (int i = 0; i < products.length; i++) {
-            Product product = new Product("Example Product", 19.99, "This is a description", R.drawable.logo_souk);
+            Product product = new Product((long) i,"Example Product", 19.99, "This is a description", R.drawable.logo_souk);
             productList.add(product);
         }
 

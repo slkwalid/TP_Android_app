@@ -6,19 +6,28 @@ import androidx.annotation.NonNull;
 
 public class Product implements Parcelable {
 
+    private final Long id;
     private final String name;
-    private final double price;
+    private final Double price;
     private final String description;
     private final int imageResourceId;
 
-    public Product(String name, double price, String description, int imageResourceId) {
+    public Product(Long id, String name, Double price, String description, int imageResourceId) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.imageResourceId = imageResourceId;
     }
-
+    public Product(Long id, String name, Double price, String description) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.imageResourceId = R.drawable.nofile_yet;
+    }
     protected Product(Parcel in) {
+        id = in.readLong();
         name = in.readString();
         price = in.readDouble();
         description = in.readString();
@@ -61,6 +70,7 @@ public class Product implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
 
+        parcel.writeLong(id);
         parcel.writeString(name);
         parcel.writeDouble(price);
         parcel.writeString(description);
