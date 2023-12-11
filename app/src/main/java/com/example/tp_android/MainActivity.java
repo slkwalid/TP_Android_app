@@ -1,9 +1,11 @@
 package com.example.tp_android;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -27,25 +29,34 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private static final String TAG = MainActivity.class.getSimpleName();
     private List<Product> productList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
-/*
-        // Sample static data (for testing purposes)
-        String[] products = {"Product 1", "Product 2", "Product 3", "Product 4", "Product 5", "Product 6"};
-        double[] prices = {10.0, 20.0, 30.0, 40.0, 50.0, 60.0};
 
-        // Populate the list view with static data
-        populateListView(products, prices);
- */
+        // Set up the "Go to Welcome Activity" button click listener
+        Button goToWelcomeButton = findViewById(R.id.goToWelcomeButton);
+        goToWelcomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an intent to start the WelcomeActivity
+                Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ApiFetcher fetcher = new ApiFetcher();
-        fetcher.setOnDataFetchedListener(result -> {
-            // Handle the result here (parse JSON and update UI)
-            parseJsonAndPopulateListView(result);
-            progressBar.setVisibility(View.GONE); // Hide ProgressBar when done
+        fetcher.setOnDataFetchedListener(new ApiFetcher.OnDataFetchedListener() {
+            @Override
+            public void onDataFetched(String result) {
+                // Handle the result here (parse JSON and update UI)
+                parseJsonAndPopulateListView(result);
+                progressBar.setVisibility(View.GONE); // Hide ProgressBar when done
+            }
         });
         fetcher.execute();
     }
@@ -70,18 +81,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Error parsing JSON", e);
             // Handle JSON parsing error
         }
-    }
-
-    private void populateListView(String[] products, double[] prices) {
-        for (int i = 0; i < products.length; i++) {
-            Product product = new Product((long) i,"Example Product", 19.99, "This is a description", R.drawable.logo_souk);
-            productList.add(product);
-        }
-
-        // Populate the list view with products
-        ProductAdapter adapter = new ProductAdapter(this, productList);
-        ListView listView = findViewById(R.id.listView);
-        listView.setAdapter(adapter);
     }
 
     private static class ApiFetcher extends AsyncTask<Void, Void, String> {

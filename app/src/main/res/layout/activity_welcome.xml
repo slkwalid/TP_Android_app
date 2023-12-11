@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    tools:context=".WelcomeActivity">
+    tools:context=".WelcomeActivity"
+    android:background="@drawable/faded_brown_gradient">
 
     <ImageView
         android:id="@+id/productImage"
         android:layout_width="230dp"
         android:layout_height="180dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/logo_souk"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/logo_souk" />
 
     <Button
         android:id="@+id/seeProductsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="See Products"/>
+        android:text="See Products"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#d5bf76"/>
 </LinearLayout>
