@@ -79,8 +79,26 @@ public class MainActivity extends AppCompatActivity {
             listView.setAdapter(adapter);
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing JSON", e);
+            // Sample static data (for testing purposes)
+            String[] products = {"Product 1", "Product 2", "Product 3", "Product 4", "Product 5", "Product 6"};
+            double[] prices = {10.0, 20.0, 30.0, 40.0, 50.0, 60.0};
+
+            // Populate the list view with static data
+            populateListView(products, prices);
             // Handle JSON parsing error
         }
+    }
+
+    private void populateListView(String[] products, double[] prices) {
+        for (int i = 0; i < products.length; i++) {
+            Product product = new Product((long) i,products[i], prices[i], "This is a description");
+            productList.add(product);
+        }
+
+        // Populate the list view with products
+        ProductAdapter adapter = new ProductAdapter(this, productList);
+        ListView listView = findViewById(R.id.listView);
+        listView.setAdapter(adapter);
     }
 
     private static class ApiFetcher extends AsyncTask<Void, Void, String> {
@@ -100,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             String apiUrl = "https://fakestoreapi.com/products";
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
-            String resultJson = null;
+            String resultJson = "";
 
             try {
                 URL url = new URL(apiUrl);
@@ -132,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
                     resultJson = buffer.toString();
                 } else {
-                    Log.e(TAG, "HTTP response code: " + responseCode);
+                    Log.e(TAG, "(MainActivity.java:153) HTTP response code: " + responseCode);
                 }
             } catch (IOException e) {
                 Log.e(TAG, "Error fetching data", e);
