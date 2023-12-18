@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +43,9 @@ public class ProductAdapter extends ArrayAdapter<Product> {
         // Load image, name, price, and description into the views
         if (currentProduct != null) {
             productImageView.setImageResource(currentProduct.getImageResourceId());
-            productNameTextView.setText(currentProduct.getName());
+            String img = currentProduct.getImage();
+            if (img != null) {Picasso.get().load(img).into(productImageView);}
+            productNameTextView.setText(currentProduct.getTitle());
             productPriceTextView.setText("€ " + currentProduct.getPrice());
             productDescriptionTextView.setText(currentProduct.getDescription());
 

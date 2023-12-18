@@ -7,31 +7,46 @@ import androidx.annotation.NonNull;
 public class Product implements Parcelable {
 
     private final Long id;
-    private final String name;
+    private final String title;
     private final Double price;
     private final String description;
     private final int imageResourceId;
+    private final String image;
 
-    public Product(Long id, String name, Double price, String description, int imageResourceId) {
+    public Product(Long id, String title, Double price, String description, int imageResourceId) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.price = price;
         this.description = description;
         this.imageResourceId = imageResourceId;
+        this.image = null;
     }
-    public Product(Long id, String name, Double price, String description) {
+    public Product(Long id, String title, Double price, String description) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.price = price;
         this.description = description;
         this.imageResourceId = R.drawable.nofile_yet;
+        this.image = null;
     }
+
+    public Product(Long id, String title, Double price, String description, String image)
+    {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.description = description;
+        this.imageResourceId = R.drawable.nofile_yet;
+        this.image = image;
+    }
+
     protected Product(Parcel in) {
         id = in.readLong();
-        name = in.readString();
+        title = in.readString();
         price = in.readDouble();
         description = in.readString();
         imageResourceId = in.readInt();
+        image = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -46,8 +61,8 @@ public class Product implements Parcelable {
         }
     };
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public double getPrice() {
@@ -62,6 +77,8 @@ public class Product implements Parcelable {
         return imageResourceId;
     }
 
+    public String getImage(){ return this.image; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -71,9 +88,10 @@ public class Product implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
 
         parcel.writeLong(id);
-        parcel.writeString(name);
+        parcel.writeString(title);
         parcel.writeDouble(price);
         parcel.writeString(description);
         parcel.writeInt(imageResourceId);
+        parcel.writeString(image);
     }
 }
