@@ -25,6 +25,22 @@ public class MainActivity extends AppCompatActivity {
     private List<Product> productList = new ArrayList<>();
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private final FakeStoreRepository.ProductsCallback callback =
+            new FakeStoreRepository.ProductsCallback() {
+        @Override
+        public void onProductsLoaded(List<Product> products) {
+            productList.clear();
+            productList.addAll(products);
+            adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onDataNotAvailable() {
+            Log.e(TAG, "Data not available");
+            progressBar.setVisibility(View.GONE);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,17 +49,15 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         listView = findViewById(R.id.listView);
         categorySpinner = findViewById(R.id.categorySpinner);
+        adapter = new ProductAdapter(this, productList);
+        listView.setAdapter(adapter);
 
         setupCategorySpinner();
         setupWelcomeButton();
-
-        adapter = new ProductAdapter(this, productList);
-        listView.setAdapter(adapter);
     }
 
     private void setupCategorySpinner() {
-        // TODO: Replace with actual category IDs or names
-        String[] categories = {"jewelery", "men's clothing", "women's clothing"};
+        String[] categories = {"all","electronics", "jewelery", "men's clothing", "women's clothing"};
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -53,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCategory = (String) parent.getItemAtPosition(position);
-                fetchProductsByCategory(selectedCategory);
+                if (selectedCategory.equals("all")) getProducts();
+                    else fetchProductsByCategory(selectedCategory);
             }
 
             @Override
@@ -61,23 +76,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getProducts() {
+        progressBar.setVisibility(View.VISIBLE);
+        FakeStoreRepository.getProducts(callback);
+    }
+
     private void fetchProductsByCategory(String category) {
         progressBar.setVisibility(View.VISIBLE);
-        FakeStoreRepository.getProductsByCategory(category, new FakeStoreRepository.ProductsCallback() {
-            @Override
-            public void onProductsLoaded(List<Product> products) {
-                productList.clear();
-                productList.addAll(products);
-                adapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-                Log.e(TAG, "Data not available");
-                progressBar.setVisibility(View.GONE);
-            }
-        });
+        FakeStoreRepository.getProductsByCategory(category, callback);
     }
 
     private void setupWelcomeButton() {

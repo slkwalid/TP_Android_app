@@ -11,7 +11,7 @@
         android:id="@+id/productImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/ic_launcher_background" />
+        android:src="@drawable/nofile_yet" />
 
     <TextView
         android:id="@+id/productNameTextView"
