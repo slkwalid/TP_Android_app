@@ -2,6 +2,7 @@ package com.example.tp_android;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,18 @@ public class ProductAdapter extends ArrayAdapter<Product> {
             productDescriptionTextView.setText(currentProduct.getDescription());
 
         }
+
+        listItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = getContext();
+                Intent intent = new Intent(context, ProductDetailActivity.class);
+                // Correctly pass the Parcelable Product object
+                intent.putExtra("product", getItem(position));
+                context.startActivity(intent);
+            }
+        });
+
 
         return listItemView;
     }

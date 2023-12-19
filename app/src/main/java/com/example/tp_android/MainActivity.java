@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,9 +19,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
-    private static final String TAG = MainActivity.class.getSimpleName();
-
+    private Spinner categorySpinner;
+    private ListView listView;
+    private ProductAdapter adapter;
     private List<Product> productList = new ArrayList<>();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,26 +31,44 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+        listView = findViewById(R.id.listView);
+        categorySpinner = findViewById(R.id.categorySpinner);
 
-        // Set up the "Go to Welcome Activity" button click listener
-        Button goToWelcomeButton = findViewById(R.id.goToWelcomeButton);
-        goToWelcomeButton.setOnClickListener(new View.OnClickListener() {
+        setupCategorySpinner();
+        setupWelcomeButton();
+
+        adapter = new ProductAdapter(this, productList);
+        listView.setAdapter(adapter);
+    }
+
+    private void setupCategorySpinner() {
+        // TODO: Replace with actual category IDs or names
+        String[] categories = {"jewelery", "men's clothing", "women's clothing"};
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerAdapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                // Create an intent to start the WelcomeActivity
-                Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-                startActivity(intent);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCategory = (String) parent.getItemAtPosition(position);
+                fetchProductsByCategory(selectedCategory);
             }
-        });
 
-        // Fetch products using FakeStoreRepository
-        FakeStoreRepository.getProducts(new FakeStoreRepository.ProductsCallback() {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+    }
+
+    private void fetchProductsByCategory(String category) {
+        progressBar.setVisibility(View.VISIBLE);
+        FakeStoreRepository.getProductsByCategory(category, new FakeStoreRepository.ProductsCallback() {
             @Override
             public void onProductsLoaded(List<Product> products) {
                 productList.clear();
                 productList.addAll(products);
-                populateListView();
+                adapter.notifyDataSetChanged();
                 progressBar.setVisibility(View.GONE);
             }
 
@@ -57,52 +80,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void populateListView() {
-        ProductAdapter adapter = new ProductAdapter(this, productList);
-        ListView listView = findViewById(R.id.listView);
-        listView.setAdapter(adapter);
+    private void setupWelcomeButton() {
+        Button goToWelcomeButton = findViewById(R.id.goToWelcomeButton);
+        goToWelcomeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+            startActivity(intent);
+        });
     }
-    /*
-    private void parseJsonAndPopulateListView(String jsonResult) {
-        try {
-            JSONArray jsonArray = new JSONArray(jsonResult);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Product product = new Product(jsonObject.getLong("id"),
-                        jsonObject.getString("title"),
-                        jsonObject.getDouble("price"),
-                        jsonObject.getString("description"),
-                        jsonObject.getString("image")
-                );
-                productList.add(product);
-            }
-            // Update ListView through the adapter
-            ProductAdapter adapter = new ProductAdapter(this, productList);
-            ListView listView = findViewById(R.id.listView);
-            listView.setAdapter(adapter);
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parsing JSON", e);
-            // Sample static data (for testing purposes)
-            String[] products = {"Product 1", "Product 2", "Product 3", "Product 4", "Product 5", "Product 6"};
-            double[] prices = {10.0, 20.0, 30.0, 40.0, 50.0, 60.0};
-
-            // Populate the list view with static data
-            populateListView(products, prices);
-            // Handle JSON parsing error
-        }
-    }
-
-    private void populateListView(String[] products, double[] prices) {
-        for (int i = 0; i < products.length; i++) {
-            Product product = new Product((long) i,products[i], prices[i], "This is a description");
-            productList.add(product);
-        }
-
-        // Populate the list view with products
-        ProductAdapter adapter = new ProductAdapter(this, productList);
-        ListView listView = findViewById(R.id.listView);
-        listView.setAdapter(adapter);
-    }
-
-     */
 }
+
