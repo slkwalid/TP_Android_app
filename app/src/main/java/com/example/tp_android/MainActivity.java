@@ -27,20 +27,20 @@ public class MainActivity extends AppCompatActivity {
 
     private final FakeStoreRepository.ProductsCallback callback =
             new FakeStoreRepository.ProductsCallback() {
-        @Override
-        public void onProductsLoaded(List<Product> products) {
-            productList.clear();
-            productList.addAll(products);
-            adapter.notifyDataSetChanged();
-            progressBar.setVisibility(View.GONE);
-        }
+                @Override
+                public void onProductsLoaded(List<Product> products) {
+                    productList.clear();
+                    productList.addAll(products);
+                    adapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
 
-        @Override
-        public void onDataNotAvailable() {
-            Log.e(TAG, "Data not available");
-            progressBar.setVisibility(View.GONE);
-        }
-    };
+                @Override
+                public void onDataNotAvailable() {
+                    Log.e(TAG, "Data not available");
+                    progressBar.setVisibility(View.GONE);
+                }
+            };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCategory = (String) parent.getItemAtPosition(position);
                 if (selectedCategory.equals("all")) getProducts();
-                    else fetchProductsByCategory(selectedCategory);
+                else fetchProductsByCategory(selectedCategory);
             }
 
             @Override
@@ -94,4 +94,3 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 }
-

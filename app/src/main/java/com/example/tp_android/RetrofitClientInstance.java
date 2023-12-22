@@ -7,7 +7,6 @@ public class RetrofitClientInstance {
     private static Retrofit retrofit;
     private static final String BASE_URL = "https://fakestoreapi.com/";
 
-    // Private constructor to prevent instantiation
     private RetrofitClientInstance() {}
 
     public static Retrofit getRetrofitInstance() {
