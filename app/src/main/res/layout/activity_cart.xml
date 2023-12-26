@@ -8,23 +8,23 @@
 
     <TextView
         android:id="@+id/tvTotalItems"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Total Items: 0"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/tvTotalAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Amount: $0.00"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp"
+        android:text="Total Items: 0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCartItems"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvTotalAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Total Amount: $0.00" />
 
     <Button
         android:id="@+id/btnCheckout"

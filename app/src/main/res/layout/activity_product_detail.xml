@@ -11,7 +11,8 @@
         android:id="@+id/productImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/nofile_yet" />
+        android:src="@drawable/nofile_yet"
+        android:importantForAccessibility="no" />
 
     <TextView
         android:id="@+id/productNameTextView"
@@ -36,12 +37,44 @@
         android:text="Description"
         android:layout_marginTop="4dp"/>
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Back" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/addToCartButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add to cart" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/buyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Buy" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

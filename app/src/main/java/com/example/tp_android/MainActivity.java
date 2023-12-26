@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ProductAdapter adapter;
     private List<Product> productList = new ArrayList<>();
+
+    private CartState cart;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final FakeStoreRepository.ProductsCallback callback =
@@ -46,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.cart = new CartState(getApplicationContext());
+
         progressBar = findViewById(R.id.progressBar);
         listView = findViewById(R.id.listView);
         categorySpinner = findViewById(R.id.categorySpinner);
-        adapter = new ProductAdapter(this, productList);
+        adapter = new ProductAdapter(this, productList, this.cart);
         listView.setAdapter(adapter);
 
         setupCategorySpinner();

@@ -4,6 +4,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class Product implements Parcelable {
 
     private final Long id;
@@ -30,8 +32,7 @@ public class Product implements Parcelable {
         this.image = null;
     }
 
-    public Product(Long id, String title, Double price, String description, String image)
-    {
+    public Product(Long id, String title, Double price, String description, String image) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -61,6 +62,9 @@ public class Product implements Parcelable {
         }
     };
 
+    public long getId() {
+        return id;
+    }
     public String getTitle() {
         return title;
     }
@@ -93,5 +97,18 @@ public class Product implements Parcelable {
         parcel.writeString(description);
         parcel.writeInt(imageResourceId);
         parcel.writeString(image);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

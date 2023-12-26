@@ -23,7 +23,6 @@
         android:id="@+id/seeProductsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="See Products"
         android:layout_gravity="center_horizontal"
-        android:textColor="#d5bf76"/>
+        android:text="See Products" />
 </LinearLayout>
