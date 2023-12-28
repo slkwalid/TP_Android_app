@@ -45,6 +45,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/btn_view_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="viewCart"
+        android:text="View Cart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
         android:id="@+id/goToWelcomeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

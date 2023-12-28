@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         FakeStoreRepository.getProductsByCategory(category, callback);
     }
+    public void viewCart(View view) {
+        Intent intent = new Intent(this, Cart.class);
+        startActivity(intent);
+    }
 
     private void setupWelcomeButton() {
         Button goToWelcomeButton = findViewById(R.id.goToWelcomeButton);
